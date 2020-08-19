@@ -17,7 +17,22 @@ let getJump = (arr, pos):int => {
    }
 }
 
-let rec escape = (arr, pos, step) => {
+let rec part1 = (arr, pos, step) => {
+    if(pos^ >= len || pos^ < 0){
+        step;
+    }else{
+        let cur = pos^;
+        let jump = getJump(arr, pos);
+        pos := jump + pos^;
+        Js.Array.unsafe_set(arr, cur, jump+1);    
+                
+        part1(arr, pos, step+1);
+    }
+}
+
+
+
+let rec part2 = (arr, pos, step) => {
     if(pos^ >= len || pos^ < 0){
         step;
     }else{
@@ -25,9 +40,14 @@ let rec escape = (arr, pos, step) => {
         let jump = getJump(arr, pos);
         pos := jump + pos^;
         
-        Js.Array.unsafe_set(arr, cur, jump+1);
-        escape(arr, pos, step+1);
+        if(jump >= 3){
+            Js.Array.unsafe_set(arr, cur, jump-1);    
+        }else{
+            Js.Array.unsafe_set(arr, cur, jump+1);    
+        }
+        
+        part2(arr, pos, step+1);
     }
 }
 
-Js.log(escape(arr, pos, 0));
+Js.log(part1(arr, pos, 0));
